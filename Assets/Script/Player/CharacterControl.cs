@@ -50,7 +50,7 @@ public class CharacterControl : MonoBehaviour
             speedMultiplier /= 2;
         }
     }
-    private void Crouch()
+    private void Crouch()   
     {
         if (Input.GetKeyDown(KeyCode.C))
         {
