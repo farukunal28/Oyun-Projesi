@@ -5224,7 +5224,7 @@ GameObject:
   - component: {fileID: 621899561}
   - component: {fileID: 621899560}
   - component: {fileID: 621899562}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Karakter
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -5361,9 +5361,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 621899560}
   spriteRenderer: {fileID: 621899558}
-  speedMultiplier: 3
-  maxHealth: 5
-  health: 5
+  speed: 3
+  maxHealth: 15
+  health: 159999
   Anim: {fileID: 621899557}
 --- !u!61 &621899562
 BoxCollider2D:
@@ -5455,7 +5455,6 @@ GameObject:
   m_Component:
   - component: {fileID: 868674627}
   - component: {fileID: 868674628}
-  - component: {fileID: 868674629}
   - component: {fileID: 868674630}
   m_Layer: 0
   m_Name: Gun Model
@@ -5532,27 +5531,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &868674629
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 868674626}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 3c54998b47368f1408ae9cf6ad8b6141, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &868674630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5565,9 +5543,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 088c20347ebb47c4f9cefbee1bf30c95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  setDuration: 1
+  reloadDuration: 3
   range: 5
   damage: 5
-  duration: 5
+  magazineSize: 5
+  currentMagazine: 5
+  ammo: 20
 --- !u!1 &966250893
 GameObject:
   m_ObjectHideFlags: 0
