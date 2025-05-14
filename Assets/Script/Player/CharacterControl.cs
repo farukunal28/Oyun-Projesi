@@ -1,4 +1,5 @@
 
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 public class CharacterControl : MonoBehaviour
@@ -16,6 +17,8 @@ public class CharacterControl : MonoBehaviour
 
     public Animator Anim;
 
+
+    private bool crouch;
 
     private void Update()
     {
@@ -54,10 +57,12 @@ public class CharacterControl : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.C))
         {
+            crouch = true;
             Anim.SetBool("Crouch", true);
         }
         if (Input.GetKeyUp(KeyCode.C))
         {
+            crouch = false;
             Anim.SetBool("Crouch", false);
         }
     }
@@ -87,7 +92,14 @@ public class CharacterControl : MonoBehaviour
         health -= damage;
         CheckHealth();
     }
-
+    public void GetShoot(float damage)
+    {
+        if (!crouch|| Random.Range(0, 4) == 0)
+        {
+            TakeDamage(damage);
+            StartCoroutine(FREAKYDAMAGEANÝMATÝON());
+        }
+    }
     private void CheckHealth() 
     {
         if(health <= 0) 
@@ -100,4 +112,11 @@ public class CharacterControl : MonoBehaviour
         SceneManager.LoadScene(0);
     }
     #endregion
+
+    private IEnumerator FREAKYDAMAGEANÝMATÝON()
+    {
+        spriteRenderer.flipY = true;
+        yield return new WaitForSeconds(0.2f);
+        spriteRenderer.flipY = false;
+    }
 }

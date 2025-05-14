@@ -11,15 +11,20 @@ public class Enemy : MonoBehaviour
 
     public Transform target;
     public CharacterControl characterControl;
+    private EnemyGun gun;
     private void Start()
     {
         if (target == null)
         { target = GameObject.Find("Karakter").transform; }
         characterControl = target.GetComponent<CharacterControl>();
+        gun = GetComponentInChildren<EnemyGun>();
     }
     private void Update()
     {
-        Move();
+        if(Vector2.Distance(transform.position, target.transform.position) >= gun.range * 0.7f)
+        {
+            Move();
+        }
     }
 
     private void Move()
@@ -30,9 +35,9 @@ public class Enemy : MonoBehaviour
 
 
     #region Combat
-    public void DealDamage(Enemy enemy, float damage)
+    public void DealDamage(float damage)
     {
-        characterControl.TakeDamage(1);
+        characterControl.TakeDamage(damage);
     }
     public void TakeDamage(float damage)
     {
