@@ -7,11 +7,12 @@ public class CharacterControl : MonoBehaviour
 
     public SpriteRenderer spriteRenderer;
 
-    public float Speed;
+    public float speedMultiplier;
 
 
 
-    public int Health;
+    public float maxHealth;
+    public float health;
 
     public Animator Anim;
 
@@ -21,51 +22,46 @@ public class CharacterControl : MonoBehaviour
         Move();
     }
 
-
+    #region Movement
     private void Move()
     {
-
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
 
-        Vector2 MoveDirection = new Vector2(moveX , moveY ).normalized;
+        Vector2 moveDirection = new Vector2(moveX , moveY ).normalized;
+        rb.velocity = moveDirection * speedMultiplier;
 
-        rb.velocity = new Vector2(MoveDirection.x * Speed , MoveDirection.y * Speed);
+        TurnDirection(moveX);
 
-        RightLeft(moveX);
+        Sprint();
+        Crouch();
 
         Anim.SetFloat("Speed", rb.velocity.magnitude);
 
-
-        
-        if (Input.GetKeyDown(KeyCode.LeftShift)) 
+    }
+    private void Sprint()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            Speed *= 2;
+            speedMultiplier *= 2;
         }
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
-            Speed /= 2;
+            speedMultiplier /= 2;
         }
-
-
-
-
     }
-
-    public void HealthContorol() 
+    private void Crouch()
     {
-
-        if(Health <= 0) 
+        if (Input.GetKeyDown(KeyCode.C))
         {
-            SceneManager.LoadScene(0);
-
+            Anim.SetBool("Crouch", true);
         }
-
+        if (Input.GetKeyUp(KeyCode.C))
+        {
+            Anim.SetBool("Crouch", false);
+        }
     }
-
-
-
-    private void RightLeft(float moveX)
+    private void TurnDirection(float moveX)
     {
         
         if(moveX < 0) 
@@ -73,10 +69,35 @@ public class CharacterControl : MonoBehaviour
             spriteRenderer.flipX = true;
             
         }
-        else 
+        else if (moveX > 0)
         {
             spriteRenderer.flipX = false;
      
         }
     }
+    #endregion
+
+    #region Combat
+    public void DealDamage(Enemy enemy, float damage)
+    {
+        enemy.TakeDamage(damage);
+    }
+    public void TakeDamage(float damage)
+    {
+        health -= damage;
+        CheckHealth();
+    }
+
+    private void CheckHealth() 
+    {
+        if(health <= 0) 
+        {
+            Die();
+        }
+    }
+    private void Die()
+    {
+        SceneManager.LoadScene(0);
+    }
+    #endregion
 }

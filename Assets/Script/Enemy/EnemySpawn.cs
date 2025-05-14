@@ -17,12 +17,12 @@ public class EnemySpawn : MonoBehaviour
     {
         while (true)
         {
-            SpawnObject();
+            SpawnEnemy();
             yield return new WaitForSeconds(spawnInterval);
         }
     }
 
-    void SpawnObject()
+    void SpawnEnemy()
     {
         if (spawnPoints.Length == 0 || objectToSpawn == null)
             return;
