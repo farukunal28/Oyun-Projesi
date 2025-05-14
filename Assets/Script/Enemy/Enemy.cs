@@ -4,10 +4,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Enemy : MonoBehaviour
+public class Enemy : CharacterBase
 {
-    private float health = 10;
-    public float Speed;
 
     public Transform target;
     public CharacterControl characterControl;
@@ -18,6 +16,7 @@ public class Enemy : MonoBehaviour
         { target = GameObject.Find("Karakter").transform; }
         characterControl = target.GetComponent<CharacterControl>();
         gun = GetComponentInChildren<EnemyGun>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
     private void Update()
     {
@@ -29,31 +28,9 @@ public class Enemy : MonoBehaviour
 
     private void Move()
     {
-        transform.position = Vector2.MoveTowards(transform.position, target.transform.position, Speed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
     }
 
 
 
-    #region Combat
-    public void DealDamage(float damage)
-    {
-        characterControl.TakeDamage(damage);
-    }
-    public void TakeDamage(float damage)
-    {
-        health -= damage;
-        CheckHealth();
-    }
-    private void CheckHealth()
-    {
-        if (health <= 0)
-        {
-            Die();
-        }
-    }
-    private void Die()
-    {
-        Destroy(gameObject);
-    }
-    #endregion
 }

@@ -2,24 +2,16 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-public class CharacterControl : MonoBehaviour
+public class CharacterControl : CharacterBase
 {
-   public Rigidbody2D rb;
-
-    public SpriteRenderer spriteRenderer;
-
-    public float speedMultiplier;
 
 
 
-    public float maxHealth;
-    public float health;
-
-    public Animator Anim;
-
-
-    private bool crouch;
-
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
     private void Update()
     {
         Move();
@@ -32,7 +24,7 @@ public class CharacterControl : MonoBehaviour
         float moveY = Input.GetAxisRaw("Vertical");
 
         Vector2 moveDirection = new Vector2(moveX , moveY ).normalized;
-        rb.velocity = moveDirection * speedMultiplier;
+        rb.velocity = moveDirection * speed;
 
         TurnDirection(moveX);
 
@@ -46,11 +38,11 @@ public class CharacterControl : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            speedMultiplier *= 2;
+            speed *= 2;
         }
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
-            speedMultiplier /= 2;
+            speed /= 2;
         }
     }
     private void Crouch()   
@@ -82,41 +74,5 @@ public class CharacterControl : MonoBehaviour
     }
     #endregion
 
-    #region Combat
-    public void DealDamage(Enemy enemy, float damage)
-    {
-        enemy.TakeDamage(damage);
-    }
-    public void TakeDamage(float damage)
-    {
-        health -= damage;
-        CheckHealth();
-    }
-    public void GetShoot(float damage)
-    {
-        if (!crouch|| Random.Range(0, 4) == 0)
-        {
-            TakeDamage(damage);
-            StartCoroutine(FREAKYDAMAGEANÝMATÝON());
-        }
-    }
-    private void CheckHealth() 
-    {
-        if(health <= 0) 
-        {
-            Die();
-        }
-    }
-    private void Die()
-    {
-        SceneManager.LoadScene(0);
-    }
-    #endregion
 
-    private IEnumerator FREAKYDAMAGEANÝMATÝON()
-    {
-        spriteRenderer.flipY = true;
-        yield return new WaitForSeconds(0.2f);
-        spriteRenderer.flipY = false;
-    }
 }

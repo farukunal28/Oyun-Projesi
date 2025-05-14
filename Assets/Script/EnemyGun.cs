@@ -2,19 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyGun : MonoBehaviour
+public class EnemyGun : Gun
 {
     Enemy enemy;
     CharacterControl characterControl;
-    public float range;
-    public float damage;
-    public float duration;
-    private bool canFire = true;
 
-    private SpriteRenderer spriteRenderer;
-    private ParticleSystem particle;
 
-    private Vector3 direction;
 
     private void Start()
     {
@@ -29,7 +22,7 @@ public class EnemyGun : MonoBehaviour
         RotateWeapon();
         if (CheckFire())
         {
-            Fire();
+            Fire("Player");
         }
     }
 
@@ -37,7 +30,6 @@ public class EnemyGun : MonoBehaviour
     {
         if(canFire)
         {
-
             direction = (characterControl.transform.position - transform.position).normalized;
 
 
@@ -49,24 +41,11 @@ public class EnemyGun : MonoBehaviour
         }
     }
 
-    void CheckSwitchGun(float Angle)
-    {
-
-        if (Angle > 90 || Angle < -90)
-        {
-            spriteRenderer.flipY = true;
-        }
-        else
-        {
-            spriteRenderer.flipY = false;
-        }
-
-    }
 
     public bool CheckFire()
     {
         float dis = Vector3.Distance(characterControl.transform.position, transform.position);
-
+        
         if (dis <= range && canFire)
         {
             return true;
@@ -78,34 +57,6 @@ public class EnemyGun : MonoBehaviour
     }
 
 
-    private void Fire()
-    {
-        StartCoroutine(FireWait());
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, range, LayerMask.GetMask("Player"));
 
-        if (hit.collider != null && hit.collider.CompareTag("Player"))
-        {
-            if (characterControl)
-            {
-                characterControl.GetShoot(damage);
-            }
-        }
-    }
 
-    IEnumerator FireWait()
-    {
-        canFire = false;
-        StartCoroutine(Reload());
-        yield return new WaitForSeconds(duration);
-        canFire = true;
-    }
-
-    IEnumerator Reload()
-    {
-        while (!canFire)
-        {
-            transform.Rotate(0, 0, Time.deltaTime * 500);
-            yield return null;
-        }
-    }
 }

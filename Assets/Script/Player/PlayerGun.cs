@@ -5,34 +5,26 @@ using Unity.Burst.CompilerServices;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
-public class PlayerGun : MonoBehaviour
+public class PlayerGun : Gun
 {
-    public float range;
-    public float damage;
-    public float duration;
-
-    private Vector3 direction;
-
-
-
-    private bool canFire = true;
-
-
-
-    private SpriteRenderer spriteRenderer;
-    private ParticleSystem particle;
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         particle = GetComponent<ParticleSystem>();
     }
-
     void Update()
     {
         RotateWeapon();
         CheckFire();
+        checkreload();
     }
-
+    void checkreload()
+    {
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            StartCoroutine(ReloadDelay());
+        }
+    }
     void RotateWeapon()
     {
         if (canFire)
@@ -49,64 +41,17 @@ public class PlayerGun : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 0, Angle);
         }
     }
-    void CheckSwitchGun(float Angle) 
-    {
-
-        if(Angle >90 || Angle < -90) 
-        {
-            spriteRenderer.flipY = true;
-        }
-        else 
-        {
-            spriteRenderer.flipY = false;
-        }
-
-    }
-
-
-
     void CheckFire()
     {
-        if (Input.GetMouseButtonDown(0) && canFire == true)
+        if (Input.GetMouseButtonDown(0) && canFire == true && currentMagazine > 0)
         {
-            Fire();
-        }
-    }
-    private void Fire()
-    {
-        StartCoroutine(FireWait());
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, range, LayerMask.GetMask("Enemy"));
-
-        if (hit.collider != null && hit.collider.CompareTag("Enemy"))
-        {
-            Enemy enemy = hit.collider.GetComponent<Enemy>();
-
-            if (enemy)
-            {
-                enemy.TakeDamage(damage);
-            }
+            Fire("Enemy");
         }
     }
 
     private void Particle()
     {
         GetComponent<ParticleSystem>().Play();
-    }
-    IEnumerator FireWait() 
-    {
-        canFire = false;
-        StartCoroutine(Reload());
-        yield return new WaitForSeconds(duration);
-        canFire = true;      
-    }
-  
-    IEnumerator Reload()
-    {
-        while (!canFire)
-        {
-            transform.Rotate(0, 0, Time.deltaTime * 500);
-            yield return null;
-        }
     }
 
 

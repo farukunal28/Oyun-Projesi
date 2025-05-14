@@ -144,7 +144,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d71e642ca2918e42a4209999aa786a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 2
+  rb: {fileID: 0}
+  spriteRenderer: {fileID: 0}
+  speed: 3
+  maxHealth: 10
+  health: 10
+  Anim: {fileID: 0}
   target: {fileID: 0}
   characterControl: {fileID: 0}
 --- !u!1 &4197724393303606161
@@ -245,9 +250,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 020b86d9da83d484bb943ac72f71a006, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  setDuration: 1
+  reloadDuration: 3
   range: 5
   damage: 5
-  duration: 1
+  magazineSize: 5
+  currentMagazine: 5
+  ammo: 5
 --- !u!1 &5013435916238883060
 GameObject:
   m_ObjectHideFlags: 0
