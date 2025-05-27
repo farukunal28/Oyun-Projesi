@@ -48,12 +48,12 @@ public class CharacterControl : CharacterBase
     }
     private void Crouch()   
     {
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKey(KeyCode.C) && rb.velocity.magnitude > 0)
         {
             crouch = true;
             Anim.SetBool("Crouch", true);
         }
-        if (Input.GetKeyUp(KeyCode.C))
+        if (!Input.GetKey(KeyCode.C) || rb.velocity.magnitude == 0)
         {
             crouch = false;
             Anim.SetBool("Crouch", false);
