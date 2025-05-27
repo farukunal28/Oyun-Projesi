@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class CharacterBase : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class CharacterBase : MonoBehaviour
 
     public float speed;
 
-
+    public Slider HealtBar;
 
     public float maxHealth;
     public float health;
@@ -21,6 +22,8 @@ public class CharacterBase : MonoBehaviour
 
     protected bool crouch;
 
+
+
     #region Combat
     public void DealDamage(CharacterBase target,float damage)
     {
@@ -29,6 +32,7 @@ public class CharacterBase : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage;
+        HeartBarContorol(-damage);
         CheckHealth();
     }
     public void GetShoot(float damage)
@@ -50,9 +54,14 @@ public class CharacterBase : MonoBehaviour
     {
         Destroy(gameObject);//!
     }
+
+    void HeartBarContorol(float X)//faruk 
+    {
+        HealtBar.value += X;
+    }
     #endregion
 
-
+    
 
     private IEnumerator FREAKYDAMAGEANÝMATÝON()
     {

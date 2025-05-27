@@ -10,6 +10,7 @@ public class Enemy : CharacterBase
     public Transform target;
     public CharacterControl characterControl;
     private EnemyGun gun;
+
     private void Start()
     {
         if (target == null)

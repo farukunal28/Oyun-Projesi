@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
 
 public abstract class Gun : MonoBehaviour
 {
@@ -18,6 +19,10 @@ public abstract class Gun : MonoBehaviour
     protected SpriteRenderer spriteRenderer;
     protected ParticleSystem particle;
 
+   public  TextMeshProUGUI Bullet;
+
+    public TextMeshProUGUI Sajor;
+
     protected void Load()
     {
         float empty = magazineSize - currentMagazine;
@@ -25,6 +30,7 @@ public abstract class Gun : MonoBehaviour
         {
             ammo -= empty;
             currentMagazine += empty;
+            TextPrinting(currentMagazine, ammo);//faruk
         }
         else
         {
@@ -41,7 +47,8 @@ public abstract class Gun : MonoBehaviour
         if(currentMagazine > 0)
         {
             currentMagazine -= 1;
-            if(currentMagazine == 0)
+            TextPrinting(currentMagazine, ammo);//faruk
+            if (currentMagazine == 0)
             {
                 canFire = false;
             }
@@ -97,6 +104,7 @@ public abstract class Gun : MonoBehaviour
     {
         ThrowBullet();
         StartCoroutine(ShotDelay());
+     
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, range, LayerMask.GetMask(layer));
 
         if (hit.collider != null && hit.collider.CompareTag(layer))
@@ -108,4 +116,15 @@ public abstract class Gun : MonoBehaviour
             }
         }
     }
+
+
+
+    void TextPrinting(float currentMagazine,float Ammo) 
+    {
+        Bullet.text = currentMagazine.ToString();
+        Sajor.text = Ammo.ToString();   
+
+    }//faruk
+
+
 }

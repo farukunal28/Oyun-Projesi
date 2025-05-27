@@ -9,6 +9,7 @@ public class CharacterControl : CharacterBase
 
     private void Awake()
     {
+        HealtBar.maxValue = maxHealth;
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
