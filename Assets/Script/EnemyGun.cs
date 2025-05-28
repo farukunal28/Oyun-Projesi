@@ -25,7 +25,6 @@ public class EnemyGun : Gun
             Fire("Player");
         }
     }
-
     void RotateWeapon()
     {
         if(canFire)

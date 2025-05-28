@@ -31,7 +31,10 @@ public class Enemy : CharacterBase
     {
         transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
     }
-
+    protected override void Die()
+    {
+        Destroy(gameObject);
+    }
 
 
 }

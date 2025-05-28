@@ -1,12 +1,14 @@
 using Microsoft.Unity.VisualStudio.Editor;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Burst.CompilerServices;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 public class PlayerGun : Gun
 {
+
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -49,12 +51,12 @@ public class PlayerGun : Gun
         }
     }
 
+
     private void Particle()
     {
         GetComponent<ParticleSystem>().Play();
     }
 
 
-   
    
 }

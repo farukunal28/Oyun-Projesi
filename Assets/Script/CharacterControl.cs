@@ -75,5 +75,8 @@ public class CharacterControl : CharacterBase
     }
     #endregion
 
+    protected override void Die()
+    {
 
+    }
 }

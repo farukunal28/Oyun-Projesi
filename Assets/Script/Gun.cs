@@ -19,10 +19,12 @@ public abstract class Gun : MonoBehaviour
     protected SpriteRenderer spriteRenderer;
     protected ParticleSystem particle;
 
-   public  TextMeshProUGUI Bullet;
+    [SerializeField] protected AudioSource shootVoice;
 
-    public TextMeshProUGUI Sajor;
 
+    public TextMeshProUGUI Bullet;
+
+    public TextMeshProUGUI Sarjor;
     protected void Load()
     {
         float empty = magazineSize - currentMagazine;
@@ -98,16 +100,18 @@ public abstract class Gun : MonoBehaviour
         Load();
     }
 
+    [SerializeField] LayerMask mask;
 
-
-    protected void Fire(string layer)
+    protected void Fire(string expectedLayer)
     {
+        shootVoice.Play();
+
         ThrowBullet();
         StartCoroutine(ShotDelay());
      
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, range, LayerMask.GetMask(layer));
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, range, mask);
 
-        if (hit.collider != null && hit.collider.CompareTag(layer))
+        if (hit.collider != null && hit.collider.gameObject.layer == LayerMask.NameToLayer(expectedLayer))
         {
             if (hit.collider.GetComponent<CharacterBase>())
             {
@@ -119,10 +123,14 @@ public abstract class Gun : MonoBehaviour
 
 
 
-    void TextPrinting(float currentMagazine,float Ammo) 
+    void TextPrinting(float currentMagazine, float Ammo)
     {
-        Bullet.text = currentMagazine.ToString();
-        Sajor.text = Ammo.ToString();   
+        if (Bullet && Sarjor)
+        {
+            Bullet.text = currentMagazine.ToString();
+
+            Sarjor.text = Ammo.ToString();
+        }
 
     }//faruk
 

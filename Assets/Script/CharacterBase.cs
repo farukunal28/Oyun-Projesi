@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class CharacterBase : MonoBehaviour
+public abstract class CharacterBase : MonoBehaviour
 {
     public Rigidbody2D rb;
 
@@ -32,7 +32,7 @@ public class CharacterBase : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage;
-        HeartBarContorol(-damage);
+        HealthBarContorol(-damage);
         CheckHealth();
     }
     public void GetShoot(float damage)
@@ -50,12 +50,9 @@ public class CharacterBase : MonoBehaviour
             Die();
         }
     }
-    private void Die()
-    {
-        Destroy(gameObject);//!
-    }
+    protected abstract void Die();
 
-    void HeartBarContorol(float X)//faruk 
+    void HealthBarContorol(float X)//faruk 
     {
         HealtBar.value += X;
     }
