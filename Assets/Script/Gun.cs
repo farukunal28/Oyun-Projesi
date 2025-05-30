@@ -4,36 +4,43 @@ using TMPro;
 
 public abstract class Gun : MonoBehaviour
 {
-    protected bool gunEstablished = true;
     public float setDuration;
     public float reloadDuration;
-
     public float range;
     public float damage;
-
     public float magazineSize;
     public float currentMagazine;
     public float ammo;
 
+    protected bool gunReady = true;
     protected Vector3 direction;
+
     protected SpriteRenderer spriteRenderer;
     protected ParticleSystem particle;
+    protected AudioSource shootVoice;
 
-    [SerializeField] protected AudioSource shootVoice;
+    [SerializeField] LayerMask targetMask;
 
-    [SerializeField] LayerMask expectedMask;
 
-    public TextMeshProUGUI ammoText;
+    protected virtual void Awake()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        particle = GetComponentInChildren<ParticleSystem>();
+        shootVoice = GetComponent<AudioSource>();
+    }
+    protected virtual void Update()
+    {
+        RotateWeapon();
+    }
 
-    public TextMeshProUGUI magazineText;
-    protected void Load()
+    protected abstract void RotateWeapon();
+    protected virtual void Load()
     {
         float empty = magazineSize - currentMagazine;
         if (empty < ammo)
         {
             ammo -= empty;
             currentMagazine += empty;
-            TextPrinting(currentMagazine, ammo);//faruk
         }
         else
         {
@@ -42,20 +49,17 @@ public abstract class Gun : MonoBehaviour
         }
         if(currentMagazine > 0)
         {
-            gunEstablished = true;
+            gunReady = true;
         }
     }
-    protected void ThrowBullet()
+    protected virtual void ThrowBullet()
     {
-        if(currentMagazine > 0)
+        currentMagazine -= 1;
+        if (currentMagazine == 0)
         {
-            currentMagazine -= 1;
-            TextPrinting(currentMagazine, ammo);//faruk
-            if (currentMagazine == 0)
-            {
-                gunEstablished = false;
-            }
+            gunReady = false;
         }
+        
     }
     protected void CheckSwitchGun(float angle)
     {
@@ -69,16 +73,23 @@ public abstract class Gun : MonoBehaviour
         }
 
     }
-    protected IEnumerator ShotDelay()
+
+    #region Animasyonlar
+    protected IEnumerator StraightenUp()
     {
-        gunEstablished = false;
+        gunReady = false;
+        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(SetGun());
+    }
+    protected IEnumerator SetGun()
+    {
         StartCoroutine(SetAnim());
         yield return new WaitForSeconds(setDuration);
-        gunEstablished = true;
+        gunReady = true;
     }
     protected IEnumerator SetAnim()
     {
-        while (!gunEstablished)
+        while (!gunReady)
         {
             transform.Rotate(0, 0, Time.deltaTime * 1000);
             yield return null;
@@ -86,53 +97,41 @@ public abstract class Gun : MonoBehaviour
     }
     protected IEnumerator ReloadDelay()
     {
-        gunEstablished = false;
+        gunReady = false;
         StartCoroutine(ReloadAnim());
         yield return new WaitForSeconds(reloadDuration);
-        gunEstablished = true;
+        gunReady = true;
     }
     protected IEnumerator ReloadAnim()
     {
-        while (!gunEstablished)
+        while (!gunReady)
         {
             transform.Rotate(0, 0, Time.deltaTime * 1000);
             yield return null;
         }
         Load();
     }
-
+    #endregion
 
     protected void Fire()
     {
         shootVoice.Play();
+          particle.Play();
 
         ThrowBullet();
-        StartCoroutine(ShotDelay());
+        StartCoroutine(StraightenUp());
      
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, range, expectedMask);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, range, targetMask);
 
-        if (hit)
+        if (hit && hit.collider.GetComponent<CharacterBase>())
         {
-            if (hit.collider.GetComponent<CharacterBase>())
-            {
-                CharacterBase target = hit.collider.GetComponent<CharacterBase>();
-                target.GetShoot(damage);
-            }
+            CharacterBase target = hit.collider.GetComponent<CharacterBase>();
+            target.TakeDamage(damage);
         }
     }
 
 
 
-    void TextPrinting(float currentMagazine, float Ammo)
-    {
-        if (ammoText && magazineText)
-        {
-            ammoText.text = currentMagazine.ToString();
-
-            magazineText.text = Ammo.ToString();
-        }
-
-    }//faruk
 
 
 }

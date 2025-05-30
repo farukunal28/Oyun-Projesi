@@ -12,28 +12,26 @@ public class EnemyGun : Gun
 
     [SerializeField] protected LayerMask wallMask;
 
-    private void Start()
+    protected override void Awake()
     {
-        owner = GetComponentInParent<Enemy>();
+        base.Awake();
         player = GameObject.Find("Karakter").transform;
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        particle = GetComponent<ParticleSystem>();
+        owner = GetComponentInParent<Enemy>();
     }
-
-    private void Update()
+    protected override void Update()
     {
-        RotateWeapon();
-
+        base.Update();
         CheckSee();
 
-        if (isSeeing && owner.CheckRange() && gunEstablished && Random.Range(0, 100) == 0)
+
+        if (isSeeing && owner.CheckRange() && gunReady && Random.Range(0, 100) == 0)
         {
             Fire();
         }
     }
-    void RotateWeapon()
+    protected override void RotateWeapon()
     {
-        if(gunEstablished)
+        if(gunReady)
         {
             direction = (player.position - transform.position).normalized;
 

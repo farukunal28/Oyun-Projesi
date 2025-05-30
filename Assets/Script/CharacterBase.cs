@@ -1,47 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public abstract class CharacterBase : MonoBehaviour
 {
-    public Rigidbody2D rb;
+    protected Rigidbody2D rb;
+    protected SpriteRenderer spriteRenderer;
+    protected Animator Anim;
 
-    public SpriteRenderer spriteRenderer;
 
     public float speed;
-
-    public Slider HealtBar;
 
     public float maxHealth;
     public float health;
 
-    public Animator Anim;
-
-
-    protected bool crouch;
+    public Slider HealtBar;
 
 
 
+    protected virtual void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        Anim = GetComponent<Animator>();
+    }
+    protected virtual void Update()
+    {
+        Move();
+    }
+
+    protected abstract void Move();
     #region Combat
-    public void DealDamage(CharacterBase target,float damage)
+    public virtual void DealDamage(CharacterBase target,float damage)
     {
         target.TakeDamage(damage);
     }
-    public void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {
         health -= damage;
-        HealthBarContorol(-damage);
+        WriteHealthBar(health);
         CheckHealth();
-    }
-    public void GetShoot(float damage)
-    {
-        if (!crouch || Random.Range(0, 4) == 0)
-        {
-            TakeDamage(damage);
-            StartCoroutine(FREAKYDAMAGEANÝMATÝON());
-        }
     }
     private void CheckHealth()
     {
@@ -51,14 +52,27 @@ public abstract class CharacterBase : MonoBehaviour
         }
     }
     protected abstract void Die();
-
-    void HealthBarContorol(float X)//faruk 
-    {
-        HealtBar.value += X;
-    }
     #endregion
 
-    
+    protected void TurnDirection(float moveX)
+    {
+
+        if (moveX < 0)
+        {
+            spriteRenderer.flipX = true;
+
+        }
+        else if (moveX > 0)
+        {
+            spriteRenderer.flipX = false;
+
+        }
+    }
+
+    private void WriteHealthBar(float value)//faruk 
+    {
+        HealtBar.value = health;
+    }
 
     private IEnumerator FREAKYDAMAGEANÝMATÝON()
     {

@@ -25,7 +25,6 @@ public class Obstacle : MonoBehaviour
         float horizontalDistance = (transform.localScale.x + col.size.x + 1) / 2;
         float verticalDistance   = (transform.localScale.y + col.size.y + 1) / 2;
 
-        Debug.Log(upFlankPoint);
            upFlankPoint.position = pos + offset + Vector3.up * verticalDistance;
          downFlankPoint.position = pos + offset + Vector3.down * verticalDistance;
         rightFlankPoint.position = pos + offset + Vector3.right * horizontalDistance;

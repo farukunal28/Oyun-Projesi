@@ -9,27 +9,16 @@ using UnityEngine;
 public class PlayerGun : Gun
 {
 
-    private void Start()
+    [SerializeField] TextMeshProUGUI ammoText, magazineText;
+    protected override void Update()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        particle = GetComponent<ParticleSystem>();
+        base.Update();
+        HandleFire();
+        HandleReload();
     }
-    void Update()
+    protected override void RotateWeapon()
     {
-        RotateWeapon();
-        CheckFire();
-        checkreload();
-    }
-    void checkreload()
-    {
-        if(Input.GetKeyDown(KeyCode.R))
-        {
-            StartCoroutine(ReloadDelay());
-        }
-    }
-    void RotateWeapon()
-    {
-        if (gunEstablished)
+        if (gunReady)
         {
             Vector3 mouseScreenPos = Input.mousePosition;
             Vector3 worldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
@@ -43,20 +32,42 @@ public class PlayerGun : Gun
             transform.rotation = Quaternion.Euler(0, 0, Angle);
         }
     }
-    void CheckFire()
+    protected override void Load()
     {
-        if (Input.GetMouseButtonDown(0) && gunEstablished == true && currentMagazine > 0)
+        base.Load();
+        TextPrinting(currentMagazine, ammo);//faruk
+    }
+    protected override void ThrowBullet()
+    {
+        base.ThrowBullet();
+        TextPrinting(currentMagazine, ammo);//faruk
+    }
+
+
+
+    void HandleReload()
+    {
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            StartCoroutine(ReloadDelay());
+        }
+    }
+    void HandleFire()
+    {
+        if (Input.GetMouseButtonDown(0) && gunReady == true && currentMagazine > 0)
         {
             Fire();
         }
     }
-
-
-    private void Particle()
+    void TextPrinting(float currentMagazine, float Ammo)
     {
-        GetComponent<ParticleSystem>().Play();
-    }
+        if (ammoText && magazineText)
+        {
+            ammoText.text = currentMagazine.ToString();
 
+            magazineText.text = Ammo.ToString();
+        }
 
-   
+    }//faruk
+
 }

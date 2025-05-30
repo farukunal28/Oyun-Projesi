@@ -12,25 +12,23 @@ public class Enemy : CharacterBase
     public CharacterControl characterControl;
     private EnemyGun gun;
 
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
         if (target == null)
         { target = GameObject.Find("Karakter").transform; }
+
         characterControl = target.GetComponent<CharacterControl>();
         gun = GetComponentInChildren<EnemyGun>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-    }
-    private void LateUpdate()
-    {
-        if (CheckRange() || !gun.isSeeing)
-        {
-            Move();
-        }
     }
 
-    private void Move()
+    protected override void Move()
     {
-        transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
+        TurnDirection(target.position.x - transform.position.x);
+        if (!CheckRange() || !gun.isSeeing)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
+        }
     }
     protected override void Die()
     {
@@ -39,7 +37,7 @@ public class Enemy : CharacterBase
     
     public bool CheckRange()
     {
-        return Vector3.Distance(transform.position, target.transform.position) >= (gun.range * 0.7f);
+        return Vector3.Distance(transform.position, target.transform.position) <= (gun.range * 0.7f);
     }
 
 
