@@ -10,7 +10,8 @@ public class EnemySpawn : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(SpawnRoutine());
+        //StartCoroutine(SpawnRoutine());
+        SpawnEnemy();
     }
 
     IEnumerator SpawnRoutine()

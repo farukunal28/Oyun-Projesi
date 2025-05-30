@@ -29,7 +29,7 @@ public class PlayerGun : Gun
     }
     void RotateWeapon()
     {
-        if (canFire)
+        if (gunEstablished)
         {
             Vector3 mouseScreenPos = Input.mousePosition;
             Vector3 worldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
@@ -45,9 +45,9 @@ public class PlayerGun : Gun
     }
     void CheckFire()
     {
-        if (Input.GetMouseButtonDown(0) && canFire == true && currentMagazine > 0)
+        if (Input.GetMouseButtonDown(0) && gunEstablished == true && currentMagazine > 0)
         {
-            Fire("Enemy");
+            Fire();
         }
     }
 

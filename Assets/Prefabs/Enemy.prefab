@@ -667,11 +667,14 @@ MonoBehaviour:
   currentMagazine: 5
   ammo: 5
   shootVoice: {fileID: 1061592431399426045}
-  Bullet: {fileID: 0}
-  Sarjor: {fileID: 0}
-  mask:
+  expectedMask:
     serializedVersion: 2
     m_Bits: 136
+  ammoText: {fileID: 0}
+  magazineText: {fileID: 0}
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!82 &1061592431399426045
 AudioSource:
   m_ObjectHideFlags: 0

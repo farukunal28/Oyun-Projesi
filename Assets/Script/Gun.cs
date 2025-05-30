@@ -4,15 +4,15 @@ using TMPro;
 
 public abstract class Gun : MonoBehaviour
 {
-    protected bool canFire = true;
+    protected bool gunEstablished = true;
     public float setDuration;
     public float reloadDuration;
+
     public float range;
     public float damage;
 
     public float magazineSize;
     public float currentMagazine;
-
     public float ammo;
 
     protected Vector3 direction;
@@ -21,10 +21,11 @@ public abstract class Gun : MonoBehaviour
 
     [SerializeField] protected AudioSource shootVoice;
 
+    [SerializeField] LayerMask expectedMask;
 
-    public TextMeshProUGUI Bullet;
+    public TextMeshProUGUI ammoText;
 
-    public TextMeshProUGUI Sarjor;
+    public TextMeshProUGUI magazineText;
     protected void Load()
     {
         float empty = magazineSize - currentMagazine;
@@ -41,7 +42,7 @@ public abstract class Gun : MonoBehaviour
         }
         if(currentMagazine > 0)
         {
-            canFire = true;
+            gunEstablished = true;
         }
     }
     protected void ThrowBullet()
@@ -52,7 +53,7 @@ public abstract class Gun : MonoBehaviour
             TextPrinting(currentMagazine, ammo);//faruk
             if (currentMagazine == 0)
             {
-                canFire = false;
+                gunEstablished = false;
             }
         }
     }
@@ -70,14 +71,14 @@ public abstract class Gun : MonoBehaviour
     }
     protected IEnumerator ShotDelay()
     {
-        canFire = false;
+        gunEstablished = false;
         StartCoroutine(SetAnim());
         yield return new WaitForSeconds(setDuration);
-        canFire = true;
+        gunEstablished = true;
     }
     protected IEnumerator SetAnim()
     {
-        while (!canFire)
+        while (!gunEstablished)
         {
             transform.Rotate(0, 0, Time.deltaTime * 1000);
             yield return null;
@@ -85,14 +86,14 @@ public abstract class Gun : MonoBehaviour
     }
     protected IEnumerator ReloadDelay()
     {
-        canFire = false;
+        gunEstablished = false;
         StartCoroutine(ReloadAnim());
         yield return new WaitForSeconds(reloadDuration);
-        canFire = true;
+        gunEstablished = true;
     }
     protected IEnumerator ReloadAnim()
     {
-        while (!canFire)
+        while (!gunEstablished)
         {
             transform.Rotate(0, 0, Time.deltaTime * 1000);
             yield return null;
@@ -100,18 +101,17 @@ public abstract class Gun : MonoBehaviour
         Load();
     }
 
-    [SerializeField] LayerMask mask;
 
-    protected void Fire(string expectedLayer)
+    protected void Fire()
     {
         shootVoice.Play();
 
         ThrowBullet();
         StartCoroutine(ShotDelay());
      
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, range, mask);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, range, expectedMask);
 
-        if (hit.collider != null && hit.collider.gameObject.layer == LayerMask.NameToLayer(expectedLayer))
+        if (hit)
         {
             if (hit.collider.GetComponent<CharacterBase>())
             {
@@ -125,11 +125,11 @@ public abstract class Gun : MonoBehaviour
 
     void TextPrinting(float currentMagazine, float Ammo)
     {
-        if (Bullet && Sarjor)
+        if (ammoText && magazineText)
         {
-            Bullet.text = currentMagazine.ToString();
+            ammoText.text = currentMagazine.ToString();
 
-            Sarjor.text = Ammo.ToString();
+            magazineText.text = Ammo.ToString();
         }
 
     }//faruk

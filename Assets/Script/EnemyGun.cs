@@ -1,18 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyGun : Gun
 {
-    Enemy enemy;
-    CharacterControl characterControl;
+    Enemy owner;
+    Transform player;
 
+    public bool isSeeing;
 
+    [SerializeField] protected LayerMask wallMask;
 
     private void Start()
     {
-        enemy = GetComponentInParent<Enemy>();
-        characterControl = enemy.characterControl;
+        owner = GetComponentInParent<Enemy>();
+        player = GameObject.Find("Karakter").transform;
         spriteRenderer = GetComponent<SpriteRenderer>();
         particle = GetComponent<ParticleSystem>();
     }
@@ -20,16 +23,19 @@ public class EnemyGun : Gun
     private void Update()
     {
         RotateWeapon();
-        if (CheckFire())
+
+        CheckSee();
+
+        if (isSeeing && owner.CheckRange() && gunEstablished && Random.Range(0, 100) == 0)
         {
-            Fire("Player");
+            Fire();
         }
     }
     void RotateWeapon()
     {
-        if(canFire)
+        if(gunEstablished)
         {
-            direction = (characterControl.transform.position - transform.position).normalized;
+            direction = (player.position - transform.position).normalized;
 
 
             float Angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
@@ -41,21 +47,20 @@ public class EnemyGun : Gun
     }
 
 
-    public bool CheckFire()
+    private void CheckSee()
     {
-        float dis = Vector3.Distance(characterControl.transform.position, transform.position);
-        
-        if (dis <= range && canFire)
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, range, wallMask);
+
+        if(hit)
         {
-            return true;
+            isSeeing = false;
+            owner.FindFlankPoint(hit.collider.GetComponent<Obstacle>());
         }
         else
         {
-            return false;
+            owner.target = player;
+            isSeeing = true;
         }
     }
-
-
-
 
 }
