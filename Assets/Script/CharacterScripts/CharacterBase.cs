@@ -38,7 +38,7 @@ public abstract class CharacterBase : MonoBehaviour
     public virtual void TakeDamage(float damage)
     {
         health -= damage;
-        WriteHealthBar(health);
+        WriteHealthBar();
         CheckHealth();
     }
     private void CheckHealth()
@@ -66,7 +66,7 @@ public abstract class CharacterBase : MonoBehaviour
         }
     }
 
-    private void WriteHealthBar(float value)//faruk 
+    private void WriteHealthBar()//faruk 
     {
         HealtBar.value = health;
     }

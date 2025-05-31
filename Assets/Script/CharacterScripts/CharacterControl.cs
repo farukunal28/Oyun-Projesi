@@ -2,6 +2,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 public class CharacterControl : CharacterBase
 {
     public static CharacterControl instance;
@@ -16,12 +17,13 @@ public class CharacterControl : CharacterBase
     public TextMeshProUGUI text;
 
 
-
+    [SerializeField] Slider staminaBar;
 
     protected override void Awake()
     {
         base.Awake();
         HealtBar.maxValue = maxHealth;
+        staminaBar.maxValue = maxStamina;
 
         if(instance == null )
         {
@@ -70,19 +72,15 @@ public class CharacterControl : CharacterBase
 
     }
 
-    private IEnumerator ConsumeStamina(float value)
+
+
+
+
+
+    private void WriteStaminaBar()//faruk 
     {
-        while (true)
-        {
-            stamina -= Time.deltaTime * value;
-            yield return null;
-        }
+        staminaBar.value = stamina;
     }
-
-
-
-
-
 
     public float GetStamina()
     {
@@ -105,6 +103,12 @@ public class CharacterControl : CharacterBase
         if (stamina <= 10)
         {
             stamina += Time.deltaTime;
+            WriteStaminaBar();
+        }
+        else if (stamina > 10)
+        {
+            stamina = 10;
+            WriteStaminaBar();
         }
     }
     public void ExitIdle()
@@ -121,10 +125,12 @@ public class CharacterControl : CharacterBase
         if (stamina < 10)
         {
             stamina += Time.deltaTime;
+            WriteStaminaBar();
         }
         else if (stamina > 10)
         {
             stamina = 10;
+            WriteStaminaBar();
         }
     }
     public void ExitWalk()
@@ -142,10 +148,12 @@ public class CharacterControl : CharacterBase
         if (stamina > 0)
         {
             stamina -= Time.deltaTime;
+            WriteStaminaBar();
         }
         else if (stamina < 0)
         {
             stamina = 0;
+            WriteStaminaBar();
         }
     }
     public void ExitSprint()
@@ -164,10 +172,12 @@ public class CharacterControl : CharacterBase
         if (stamina > 0)
         {
             stamina -= Time.deltaTime;
+            WriteStaminaBar();
         }
         else if (stamina < 0)
         {
             stamina = 0;
+            WriteStaminaBar();
         }
     }
     public void ExitCrouch()
