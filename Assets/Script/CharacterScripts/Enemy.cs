@@ -27,7 +27,12 @@ public class Enemy : CharacterBase
         TurnDirection(target.position.x - transform.position.x);
         if (!CheckRange() || !gun.isSeeing)
         {
-            transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
+            Vector2 distance = target.position - transform.position;
+            rb.velocity = distance.normalized * speed;
+        }
+        else
+        {
+            rb.velocity = Vector2.zero;
         }
     }
     protected override void Die()
