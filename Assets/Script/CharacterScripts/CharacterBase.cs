@@ -62,7 +62,6 @@ public abstract class CharacterBase : MonoBehaviour
         else if (moveX > 0)
         {
             spriteRenderer.flipX = false;
-
         }
     }
 

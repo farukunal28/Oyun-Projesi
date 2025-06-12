@@ -21,7 +21,6 @@ public class Enemy : CharacterBase
         characterControl = target.GetComponent<CharacterControl>();
         gun = GetComponentInChildren<EnemyGun>();
     }
-
     protected override void Move()
     {
         TurnDirection(target.position.x - transform.position.x);
@@ -29,11 +28,24 @@ public class Enemy : CharacterBase
         {
             Vector2 distance = target.position - transform.position;
             rb.velocity = distance.normalized * speed;
+
+            if (!Anim.GetBool("Moving"))
+            {
+                Anim.SetBool("Moving", true);
+                Debug.Log("a");
+            }
         }
         else
         {
             rb.velocity = Vector2.zero;
+
+            if (Anim.GetBool("Moving"))
+            {
+                Anim.SetBool("Moving", false);
+                Debug.Log("b");
+            }
         }
+
     }
     protected override void Die()
     {
