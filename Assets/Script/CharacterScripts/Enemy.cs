@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,6 +8,8 @@ using UnityEngine.UIElements;
 
 public class Enemy : CharacterBase
 {
+    public static int score;
+    public static TextMeshProUGUI scoreText;
 
     public Transform target;
     public CharacterControl characterControl;
@@ -32,7 +35,6 @@ public class Enemy : CharacterBase
             if (!Anim.GetBool("Moving"))
             {
                 Anim.SetBool("Moving", true);
-                Debug.Log("a");
             }
         }
         else
@@ -42,13 +44,15 @@ public class Enemy : CharacterBase
             if (Anim.GetBool("Moving"))
             {
                 Anim.SetBool("Moving", false);
-                Debug.Log("b");
             }
         }
 
     }
     protected override void Die()
     {
+        score++;
+        scoreText.text = score.ToString();
+
         Destroy(gameObject);
     }
     

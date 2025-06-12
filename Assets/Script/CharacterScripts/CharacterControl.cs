@@ -2,6 +2,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class CharacterControl : CharacterBase
 {
@@ -69,7 +70,7 @@ public class CharacterControl : CharacterBase
     }
     protected override void Die()
     {
-
+        SceneManager.LoadScene(0);
     }
 
 

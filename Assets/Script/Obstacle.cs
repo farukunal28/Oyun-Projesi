@@ -11,7 +11,7 @@ public class Obstacle : MonoBehaviour
     [SerializeField] private LayerMask wallMask;
 
 
-    private Transform upFlankPoint, downFlankPoint, rightFlankPoint, leftFlankPoint;
+    public Transform upFlankPoint, downFlankPoint, rightFlankPoint, leftFlankPoint;
     void Start()
     {
         characterControl = GameObject.Find("Karakter").transform;
@@ -24,7 +24,7 @@ public class Obstacle : MonoBehaviour
         Vector3 offset = col.offset;
         float horizontalDistance = (transform.localScale.x + col.size.x + 1) / 2;
         float verticalDistance   = (transform.localScale.y + col.size.y + 1) / 2;
-
+        /*
            upFlankPoint = new GameObject().transform;
          downFlankPoint = new GameObject().transform;
         rightFlankPoint = new GameObject().transform;
@@ -35,8 +35,8 @@ public class Obstacle : MonoBehaviour
          downFlankPoint.position = pos + offset + Vector3.down * verticalDistance;
         rightFlankPoint.position = pos + offset + Vector3.right * horizontalDistance;
          leftFlankPoint.position = pos + offset + Vector3.left * horizontalDistance;
-
         SetObjectPositions();
+        */
     }
     private void SetObjectPositions()
     {
